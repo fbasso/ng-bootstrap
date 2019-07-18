@@ -5,6 +5,7 @@ export class DropdownPositionComponent {
   isInDom = true;
   placement = 'top-left';
   container: null | 'body' = null;
+  collapsed = true;
 
   togglePlacement(placement) { this.placement = placement; }
 

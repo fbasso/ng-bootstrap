@@ -389,7 +389,7 @@ export class NgbDropdown implements AfterContentInit, OnDestroy {
 
   private _applyContainer(container: null | 'body' = null) {
     this._resetContainer();
-    if (container === 'body') {
+    if (this.display === 'dynamic' && container === 'body') {
       const renderer = this._renderer;
       const dropdownMenuElement = this._menuElement.nativeElement;
       const bodyContainer = this._bodyContainer = this._bodyContainer || renderer.createElement('div');
