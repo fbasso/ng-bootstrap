@@ -21,13 +21,14 @@ import {
 import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {DOCUMENT} from '@angular/common';
 import {BehaviorSubject, fromEvent, Observable, Subject, Subscription} from 'rxjs';
-import {map, switchMap, tap} from 'rxjs/operators';
+import {map, switchMap, take, tap} from 'rxjs/operators';
 
 import {Live} from '../util/accessibility/live';
 import {ngbAutoClose} from '../util/autoclose';
 import {Key} from '../util/key';
 import {PopupService} from '../util/popup';
 import {PlacementArray, positionElements} from '../util/positioning';
+import {ngbWindowResize} from '../util/resize';
 import {isDefined, toString} from '../util/util';
 
 import {NgbTypeaheadConfig} from './typeahead-config';
@@ -88,7 +89,6 @@ export class NgbTypeahead implements ControlValueAccessor,
   private _valueChanges: Observable<string>;
   private _resubscribeTypeahead: BehaviorSubject<any>;
   private _windowRef: ComponentRef<NgbTypeaheadWindow>;
-  private _zoneSubscription: any;
 
   /**
    * The value for the `autocomplete` attribute for the `<input>` element.
@@ -206,14 +206,6 @@ export class NgbTypeahead implements ControlValueAccessor,
 
     this._popupService = new PopupService<NgbTypeaheadWindow>(
         NgbTypeaheadWindow, _injector, _viewContainerRef, _renderer, componentFactoryResolver, _applicationRef);
-
-    this._zoneSubscription = ngZone.onStable.subscribe(() => {
-      if (this.isPopupOpen()) {
-        positionElements(
-            this._elementRef.nativeElement, this._windowRef.location.nativeElement, this.placement,
-            this.container === 'body');
-      }
-    });
   }
 
   ngOnInit(): void {
@@ -229,7 +221,6 @@ export class NgbTypeahead implements ControlValueAccessor,
   ngOnDestroy(): void {
     this._closePopup();
     this._unsubscribeFromUserInput();
-    this._zoneSubscription.unsubscribe();
   }
 
   registerOnChange(fn: (value: any) => any): void { this._onChange = fn; }
@@ -311,7 +302,9 @@ export class NgbTypeahead implements ControlValueAccessor,
 
       if (this.container === 'body') {
         window.document.querySelector(this.container).appendChild(this._windowRef.location.nativeElement);
+        ngbWindowResize(this._ngZone, () => this.position(), this.selectItem);
       }
+      this._ngZone.onStable.asObservable().pipe(take(1)).subscribe(() => this.position());
 
       this._changeDetector.markForCheck();
 
@@ -403,5 +396,16 @@ export class NgbTypeahead implements ControlValueAccessor,
       this._subscription.unsubscribe();
     }
     this._subscription = null;
+  }
+
+  /**
+   * Trigger a repositioning of the typeahead popup
+   */
+  position() {
+    if (this.isPopupOpen()) {
+      positionElements(
+        this._elementRef.nativeElement, this._windowRef.location.nativeElement, this.placement,
+        this.container === 'body');
+    }
   }
 }

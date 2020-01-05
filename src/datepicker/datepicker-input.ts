@@ -19,9 +19,11 @@ import {
 } from '@angular/core';
 import {DOCUMENT} from '@angular/common';
 import {AbstractControl, ControlValueAccessor, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validator} from '@angular/forms';
+import {take} from 'rxjs/operators';
 
 import {ngbAutoClose} from '../util/autoclose';
 import {ngbFocusTrap} from '../util/focus-trap';
+import {ngbWindowResize} from '../util/resize';
 import {PlacementArray, positionElements} from '../util/positioning';
 
 import {NgbDateAdapter} from './adapters/ngb-date-adapter';
@@ -69,7 +71,6 @@ export class NgbInputDatepicker implements OnChanges,
   private _elWithFocus = null;
   private _model: NgbDate;
   private _inputValue: string;
-  private _zoneSubscription: any;
 
   /**
    * Indicates whether the datepicker popup should be closed automatically after date selection / outside click or not.
@@ -261,7 +262,6 @@ export class NgbInputDatepicker implements OnChanges,
       private _ngZone: NgZone, private _service: NgbDatepickerService, private _calendar: NgbCalendar,
       private _dateAdapter: NgbDateAdapter<any>, @Inject(DOCUMENT) private _document: any,
       private _changeDetector: ChangeDetectorRef) {
-    this._zoneSubscription = _ngZone.onStable.subscribe(() => this._updatePopupPosition());
   }
 
   registerOnChange(fn: (value: any) => any): void { this._onChange = fn; }
@@ -344,7 +344,9 @@ export class NgbInputDatepicker implements OnChanges,
 
       if (this.container === 'body') {
         window.document.querySelector(this.container).appendChild(this._cRef.location.nativeElement);
+        ngbWindowResize(this._ngZone, () => this._updatePopupPosition(), this.closed);
       }
+      this._ngZone.onStable.asObservable().pipe(take(1)).subscribe(() => this._updatePopupPosition());
 
       // focus handling
       this._elWithFocus = this._document.activeElement;
@@ -410,7 +412,6 @@ export class NgbInputDatepicker implements OnChanges,
 
   ngOnDestroy() {
     this.close();
-    this._zoneSubscription.unsubscribe();
   }
 
   private _applyDatepickerInputs(datepickerInstance: NgbDatepicker): void {
