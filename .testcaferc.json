@@ -1,0 +1,4 @@
+{
+	"browsers": "chrome",
+	"src": "./e2e-app/src/app/**/*.tc-spec.ts"
+}

@@ -39,7 +39,7 @@ describe('Datepicker Autoclose', () => {
         await page.selectDisplayMonths(displayMonths);
       });
 
-      it(`should not close when right clicking`, async() => {
+      fit(`should not close when right clicking`, async() => {
         await page.selectAutoClose('true');
 
         await openDatepicker(`Opening datepicker for right clicks`);
@@ -51,7 +51,7 @@ describe('Datepicker Autoclose', () => {
         await expectDatepickerToBeOpen(`Datepicker should NOT be closed on right click outside`);
       });
 
-      it(`should work when autoClose === true`, async() => {
+      fit(`should work when autoClose === true`, async() => {
         await page.selectAutoClose('true');
 
         // escape

@@ -1,0 +1,9 @@
+{
+    "viewportWidth": 1080,
+    "viewportHeight": 800,
+    "browser": "Chrome",
+    "baseUrl": "http://localhost:4200",
+    "integrationFolder": "e2e-app/src/app",
+    "testFiles": "**/*.cy-spec.js",
+    "video": false
+}

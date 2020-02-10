@@ -46,7 +46,9 @@
     "ssr-app:serve-express": "node ssr-app/dist/server/main.js",
     "ssr-app:e2e": "concurrently --success first --kill-others --names \"express,protractor\" \"yarn ssr-app:serve-express\" \"ng e2e ssr-app\"",
     "ssr-app:build": "ng build ssr-app --prod && ng run ssr-app:server:production",
-    "ci": "yarn check-ts && yarn test && yarn e2e && yarn build --progress false && yarn ssr"
+    "ci": "yarn check-ts && yarn test && yarn e2e && yarn build --progress false && yarn ssr",
+    "testcafe": "npx testcafe -L",
+    "cypress": "npx cypress open"
   },
   "repository": {
     "type": "git",
@@ -91,6 +93,7 @@
     "conventional-changelog-cli": "^2.0.12",
     "core-js": "^2",
     "cross-spawn": "^7.0.1",
+    "cypress": "^4.0.1",
     "ejs": "2.6.1",
     "express": "^4.16.4",
     "fs-extra": "^8.0.0",
@@ -114,6 +117,7 @@
     "prismjs": "1.16.0",
     "protractor": "~5.4.3",
     "rxjs": "~6.5.4",
+    "testcafe": "^1.8.1",
     "ts-loader": "^6.0.1",
     "ts-node": "~8.3.0",
     "ts-node-dev": "^1.0.0-pre.42",
