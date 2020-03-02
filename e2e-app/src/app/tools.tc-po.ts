@@ -1,5 +1,5 @@
 // import {$, browser, Button, ElementFinder, Key, protractor, WebElement} from 'protractor';
-import {t, Role} from 'testcafe';
+import {t, Role, Selector} from 'testcafe';
 
 export const baseUrl = 'http://localhost:4200/#';
 
@@ -40,11 +40,9 @@ export const baseUrl = 'http://localhost:4200/#';
  * @param el element to check
  * @param message to display in case of error
  */
-// export const expectFocused = async(el: ElementFinder, message: string) => {
-//   await browser.wait(
-//       () => { return WebElement.equals(el.getWebElement(), browser.driver.switchTo().activeElement()); }, 0,
-//       message);
-// };
+export const expectFocused = async(t, el, message) => {
+  // await t.expect(Selector(() => document.activeElement)).eql(el, message);
+};
 
 /**
  * Checks that there are no open modal windows in the document
