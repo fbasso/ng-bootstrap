@@ -35,6 +35,7 @@ export class Positioning {
       };
     } else {
       const offsetParentEl = this.offsetParent(element);
+      console.log('offsetParentEl', offsetParentEl.getBoundingClientRect());
 
       elPosition = this.offset(element, false);
 
@@ -63,6 +64,7 @@ export class Positioning {
 
   offset(element: HTMLElement, round = true): ClientRect {
     const elBcr = element.getBoundingClientRect();
+    debugger;
     const viewportOffset = {
       top: window.pageYOffset - document.documentElement.clientTop,
       left: window.pageXOffset - document.documentElement.clientLeft
@@ -96,8 +98,10 @@ export class Positioning {
       boolean {
     const[placementPrimary = 'top', placementSecondary = 'center'] = placement.split('-');
 
+    debugger;
     const hostElPosition = appendToBody ? this.offset(hostElement, false) : this.position(hostElement, false);
     const targetElStyles = this.getAllStyles(targetElement);
+
 
     const marginTop = parseFloat(targetElStyles.marginTop);
     const marginBottom = parseFloat(targetElStyles.marginBottom);
@@ -119,6 +123,9 @@ export class Positioning {
         break;
       case 'right':
         leftPosition = (hostElPosition.left + hostElPosition.width);
+        console.log(
+            'right position, hostElPosition.left + hostElPosition.width', hostElPosition.left, hostElPosition.width,
+            hostElPosition.left + hostElPosition.width);
         break;
     }
 
@@ -139,10 +146,17 @@ export class Positioning {
         if (placementPrimary === 'top' || placementPrimary === 'bottom') {
           leftPosition = (hostElPosition.left + hostElPosition.width / 2 - targetElement.offsetWidth / 2);
         } else {
+          console.log(
+              'center position, hostElPosition.top + hostElPosition.height / 2 - targetElement.offsetHeight / 2',
+              hostElPosition.top, hostElPosition.height, targetElement.offsetHeight,
+              hostElPosition.top + hostElPosition.height / 2 - targetElement.offsetHeight / 2);
           topPosition = (hostElPosition.top + hostElPosition.height / 2 - targetElement.offsetHeight / 2);
         }
         break;
     }
+
+    console.log('positionElements', {topPosition, leftPosition, hostElPosition});
+
 
     /// The translate3d/gpu acceleration render a blurry text on chrome, the next line is commented until a browser fix
     // targetElement.style.transform = `translate3d(${Math.round(leftPosition)}px, ${Math.floor(topPosition)}px, 0px)`;
