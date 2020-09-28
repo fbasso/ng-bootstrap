@@ -43,9 +43,9 @@ const NGB_TIMEPICKER_VALUE_ACCESSOR = {
           <input type="text" class="ngb-tp-input form-control" [class.form-control-sm]="isSmallSize"
             [class.form-control-lg]="isLargeSize"
             maxlength="2" inputmode="numeric" placeholder="HH" i18n-placeholder="@@ngb.timepicker.HH"
-            [value]="formatHour(model?.hour)" (change)="updateHour($event.target.value)"
+            [value]="formatHour(model?.hour)" (change)="updateHour($any($event).target.value)"
             [readOnly]="readonlyInputs" [disabled]="disabled" aria-label="Hours" i18n-aria-label="@@ngb.timepicker.hours"
-            (input)="formatInput($event.target)"
+            (input)="formatInput($any($event).target)"
             (keydown.ArrowUp)="changeHour(hourStep); $event.preventDefault()"
             (keydown.ArrowDown)="changeHour(-hourStep); $event.preventDefault()">
           <button *ngIf="spinners" tabindex="-1" type="button" (click)="changeHour(-hourStep)"
@@ -65,9 +65,9 @@ const NGB_TIMEPICKER_VALUE_ACCESSOR = {
           </button>
           <input type="text" class="ngb-tp-input form-control" [class.form-control-sm]="isSmallSize" [class.form-control-lg]="isLargeSize"
             maxlength="2" inputmode="numeric" placeholder="MM" i18n-placeholder="@@ngb.timepicker.MM"
-            [value]="formatMinSec(model?.minute)" (change)="updateMinute($event.target.value)"
+            [value]="formatMinSec(model?.minute)" (change)="updateMinute($any($event).target.value)"
             [readOnly]="readonlyInputs" [disabled]="disabled" aria-label="Minutes" i18n-aria-label="@@ngb.timepicker.minutes"
-            (input)="formatInput($event.target)"
+            (input)="formatInput($any($event).target)"
             (keydown.ArrowUp)="changeMinute(minuteStep); $event.preventDefault()"
             (keydown.ArrowDown)="changeMinute(-minuteStep); $event.preventDefault()">
           <button *ngIf="spinners" tabindex="-1" type="button" (click)="changeMinute(-minuteStep)"
@@ -87,9 +87,9 @@ const NGB_TIMEPICKER_VALUE_ACCESSOR = {
           </button>
           <input type="text" class="ngb-tp-input form-control" [class.form-control-sm]="isSmallSize" [class.form-control-lg]="isLargeSize"
             maxlength="2" inputmode="numeric" placeholder="SS" i18n-placeholder="@@ngb.timepicker.SS"
-            [value]="formatMinSec(model?.second)" (change)="updateSecond($event.target.value)"
+            [value]="formatMinSec(model?.second)" (change)="updateSecond($any($event).target.value)"
             [readOnly]="readonlyInputs" [disabled]="disabled" aria-label="Seconds" i18n-aria-label="@@ngb.timepicker.seconds"
-            (input)="formatInput($event.target)"
+            (input)="formatInput($any($event).target)"
             (keydown.ArrowUp)="changeSecond(secondStep); $event.preventDefault()"
             (keydown.ArrowDown)="changeSecond(-secondStep); $event.preventDefault()">
           <button *ngIf="spinners" tabindex="-1" type="button" (click)="changeSecond(-secondStep)"
@@ -104,7 +104,8 @@ const NGB_TIMEPICKER_VALUE_ACCESSOR = {
           <button type="button" class="btn btn-outline-primary" [class.btn-sm]="isSmallSize" [class.btn-lg]="isLargeSize"
             [disabled]="disabled" [class.disabled]="disabled"
                   (click)="toggleMeridian()">
-            <ng-container *ngIf="model?.hour >= 12; else am" i18n="@@ngb.timepicker.PM">{{ i18n.getAfternoonPeriod() }}</ng-container>
+            <ng-container *ngIf="model && model.hour >= 12; else am"
+                          i18n="@@ngb.timepicker.PM">{{ i18n.getAfternoonPeriod() }}</ng-container>
             <ng-template #am i18n="@@ngb.timepicker.AM">{{ i18n.getMorningPeriod() }}</ng-template>
           </button>
         </div>
@@ -115,6 +116,8 @@ const NGB_TIMEPICKER_VALUE_ACCESSOR = {
 })
 export class NgbTimepicker implements ControlValueAccessor,
     OnChanges {
+  static ngAcceptInputType_size: string;
+
   disabled: boolean;
   model: NgbTime;
 
@@ -253,7 +256,7 @@ export class NgbTimepicker implements ControlValueAccessor,
 
   formatInput(input: HTMLInputElement) { input.value = input.value.replace(FILTER_REGEX, ''); }
 
-  formatHour(value: number) {
+  formatHour(value?: number) {
     if (isNumber(value)) {
       if (this.meridian) {
         return padNumber(value % 12 === 0 ? 12 : value % 12);
@@ -265,7 +268,7 @@ export class NgbTimepicker implements ControlValueAccessor,
     }
   }
 
-  formatMinSec(value: number) { return padNumber(value); }
+  formatMinSec(value?: number) { return padNumber(isNumber(value) ? value : NaN); }
 
   get isSmallSize(): boolean { return this.size === 'small'; }
 

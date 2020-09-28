@@ -11,14 +11,14 @@ const roundLocation = function(location) {
 describe('Tooltip Position', () => {
   let page: TooltipPositionPage;
 
-  const expectTooltipsPosition = async(type: string, expectedPlacement: string, excludedPlacements = []) => {
+  const expectTooltipsPosition = async(type: string, expectedPlacement: string, excludedPlacements: string[] = []) => {
 
 
     const btn = page.getTooltipButton(type);
     await btn.click();
     const btnLocation = roundLocation(await btn.getLocation());
     const btnSize = await btn.getSize();
-    const tooltip = await page.getTooltip();
+    const tooltip = page.getTooltip();
     const tooltipLocation = roundLocation(await tooltip.getLocation());
     const tooltipSize = await tooltip.getSize();
 
@@ -32,7 +32,7 @@ describe('Tooltip Position', () => {
     excludedPlacements.forEach(
         (placement) => { expect(classname).not.toContain(`bs-tooltip-${placement}`, 'Unexpected class'); });
 
-    let yDiff: number, xDiff: number;
+    let yDiff = 0, xDiff = 0;
 
     if (primary === 'top') {
       yDiff = (tooltipLocation.y + tooltipSize.height) - btnLocation.y;

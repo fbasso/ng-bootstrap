@@ -6,7 +6,7 @@ import {Country} from './country';
 import {COUNTRIES} from './countries';
 import {DecimalPipe} from '@angular/common';
 import {debounceTime, delay, switchMap, tap} from 'rxjs/operators';
-import {SortDirection} from './sortable.directive';
+import {SortColumn, SortDirection} from './sortable.directive';
 
 interface SearchResult {
   countries: Country[];
@@ -17,16 +17,14 @@ interface State {
   page: number;
   pageSize: number;
   searchTerm: string;
-  sortColumn: string;
+  sortColumn: SortColumn;
   sortDirection: SortDirection;
 }
 
-function compare(v1, v2) {
-  return v1 < v2 ? -1 : v1 > v2 ? 1 : 0;
-}
+const compare = (v1: string | number, v2: string | number) => v1 < v2 ? -1 : v1 > v2 ? 1 : 0;
 
-function sort(countries: Country[], column: string, direction: string): Country[] {
-  if (direction === '') {
+function sort(countries: Country[], column: SortColumn, direction: string): Country[] {
+  if (direction === '' || column === '') {
     return countries;
   } else {
     return [...countries].sort((a, b) => {
@@ -82,7 +80,7 @@ export class CountryService {
   set page(page: number) { this._set({page}); }
   set pageSize(pageSize: number) { this._set({pageSize}); }
   set searchTerm(searchTerm: string) { this._set({searchTerm}); }
-  set sortColumn(sortColumn: string) { this._set({sortColumn}); }
+  set sortColumn(sortColumn: SortColumn) { this._set({sortColumn}); }
   set sortDirection(sortDirection: SortDirection) { this._set({sortDirection}); }
 
   private _set(patch: Partial<State>) {

@@ -3,6 +3,7 @@ import {
   ApplicationRef,
   ComponentFactoryResolver,
   ComponentRef,
+  EventEmitter,
   Inject,
   Injectable,
   Injector,
@@ -24,12 +25,13 @@ import {NgbModalWindow} from './modal-window';
 @Injectable({providedIn: 'root'})
 export class NgbModalStack {
   private _activeWindowCmptHasChanged = new Subject();
-  private _ariaHiddenValues: Map<Element, string> = new Map();
+  private _ariaHiddenValues: Map<Element, string | null> = new Map();
   private _backdropAttributes = ['backdropClass'];
   private _modalRefs: NgbModalRef[] = [];
   private _windowAttributes =
-      ['ariaLabelledBy', 'backdrop', 'centered', 'keyboard', 'scrollable', 'size', 'windowClass'];
+      ['ariaLabelledBy', 'ariaDescribedBy', 'backdrop', 'centered', 'keyboard', 'scrollable', 'size', 'windowClass'];
   private _windowCmpts: ComponentRef<NgbModalWindow>[] = [];
+  private _activeInstances: EventEmitter<NgbModalRef[]> = new EventEmitter();
 
   constructor(
       private _applicationRef: ApplicationRef, private _injector: Injector, @Inject(DOCUMENT) private _document: any,
@@ -67,8 +69,8 @@ export class NgbModalStack {
     const contentRef =
         this._getContentRef(moduleCFR, options.injector || contentInjector, content, activeModal, options);
 
-    let backdropCmptRef: ComponentRef<NgbModalBackdrop> =
-        options.backdrop !== false ? this._attachBackdrop(moduleCFR, containerEl) : null;
+    let backdropCmptRef: ComponentRef<NgbModalBackdrop>| undefined =
+        options.backdrop !== false ? this._attachBackdrop(moduleCFR, containerEl) : undefined;
     let windowCmptRef: ComponentRef<NgbModalWindow> = this._attachWindowComponent(moduleCFR, containerEl, contentRef);
     let ngbModalRef: NgbModalRef = new NgbModalRef(windowCmptRef, contentRef, backdropCmptRef, options.beforeDismiss);
 
@@ -89,6 +91,8 @@ export class NgbModalStack {
     }
     return ngbModalRef;
   }
+
+  get activeInstances() { return this._activeInstances; }
 
   dismissAll(reason?: any) { this._modalRefs.forEach(ngbModalRef => ngbModalRef.dismiss(reason)); }
 
@@ -204,9 +208,11 @@ export class NgbModalStack {
       const index = this._modalRefs.indexOf(ngbModalRef);
       if (index > -1) {
         this._modalRefs.splice(index, 1);
+        this._activeInstances.emit(this._modalRefs);
       }
     };
     this._modalRefs.push(ngbModalRef);
+    this._activeInstances.emit(this._modalRefs);
     ngbModalRef.result.then(unregisterModalRef, unregisterModalRef);
   }
 

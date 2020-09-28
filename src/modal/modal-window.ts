@@ -28,6 +28,7 @@ import {ModalDismissReasons} from './modal-dismiss-reasons';
     'tabindex': '-1',
     '[attr.aria-modal]': 'true',
     '[attr.aria-labelledby]': 'ariaLabelledBy',
+    '[attr.aria-describedby]': 'ariaDescribedBy',
   },
   template: `
     <div #dialog [class]="'modal-dialog' + (size ? ' modal-' + size : '') + (centered ? ' modal-dialog-centered' : '') +
@@ -41,11 +42,12 @@ import {ModalDismissReasons} from './modal-dismiss-reasons';
 export class NgbModalWindow implements OnInit,
     AfterViewInit, OnDestroy {
   private _closed$ = new Subject<void>();
-  private _elWithFocus: Element;  // element that is focused prior to modal opening
+  private _elWithFocus: Element | null = null;  // element that is focused prior to modal opening
 
   @ViewChild('dialog', {static: true}) private _dialogEl: ElementRef<HTMLElement>;
 
   @Input() ariaLabelledBy: string;
+  @Input() ariaDescribedBy: string;
   @Input() backdrop: boolean | string = true;
   @Input() centered: string;
   @Input() keyboard = true;

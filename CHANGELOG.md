@@ -1,3 +1,165 @@
+# [8.0.0-beta.1](https://github.com/ng-bootstrap/ng-bootstrap/compare/7.0.0...8.0.0-beta.1) (2020-08-06)
+
+This is the first beta release adding animations support to ng-bootstrap
+
+### Bug Fixes
+
+* **alert:** add .fade class only with animations on ([#3756](https://github.com/ng-bootstrap/ng-bootstrap/issues/3756)) ([5e941d7](https://github.com/ng-bootstrap/ng-bootstrap/commit/5e941d7262869581fa556899b7beaf73792cb55f))
+* **animations:** duration should be computed after 'startFn' execution ([4efea05](https://github.com/ng-bootstrap/ng-bootstrap/commit/4efea05d1ebf4ab12829d9424908c2d2c00dfdc1))
+* **animations:** ignore all inner transitions in 'ngbRunTransition' ([b50f4d9](https://github.com/ng-bootstrap/ng-bootstrap/commit/b50f4d92402838a0628b1970692a69c2525a8936))
+* **animations:** pass transition context with animations disabled ([#3781](https://github.com/ng-bootstrap/ng-bootstrap/issues/3781)) ([0e2120e](https://github.com/ng-bootstrap/ng-bootstrap/commit/0e2120e4e42d0b1a5a111fdf0768f3c967970957))
+* startFn called when no animation ([a14c76d](https://github.com/ng-bootstrap/ng-bootstrap/commit/a14c76d2f13777d31c3df1e29d3b8d9e40065db5))
+
+
+### Features
+
+* **accordion:** add animations ([#3766](https://github.com/ng-bootstrap/ng-bootstrap/issues/3766)) ([99de349](https://github.com/ng-bootstrap/ng-bootstrap/commit/99de34921f558e495d041e5e9d85b2f788d5e60f))
+* **alert:** add animations ([ba7362e](https://github.com/ng-bootstrap/ng-bootstrap/commit/ba7362ead5ad30e7d81a54a4d331db81a10990b3))
+* **alert:** change API due to the introduction of animations ([95f75cc](https://github.com/ng-bootstrap/ng-bootstrap/commit/95f75cc408e79911f315cd210a16e01d76e53a4d))
+* **animations:** always run the start function in ngbRunTransition ([#3793](https://github.com/ng-bootstrap/ng-bootstrap/issues/3793)) ([99e7e8c](https://github.com/ng-bootstrap/ng-bootstrap/commit/99e7e8cc92f13602b524e99b1622ecdfdabf0463))
+* **animations:** introduce 'endFn' returned by 'startFn' ([5ac913d](https://github.com/ng-bootstrap/ng-bootstrap/commit/5ac913d1d1fcdb45e8a74b6f94ff81f83db032f3))
+* **animations:** introduce transition context ([12d753b](https://github.com/ng-bootstrap/ng-bootstrap/commit/12d753b2c69a0515b2c75320f5c4d475156a9568))
+* **animations:** support 'runningTransaction: stop' ([2373de3](https://github.com/ng-bootstrap/ng-bootstrap/commit/2373de3a74e080cd551867c2421ea30990ec485d))
+* **carousel:** accessibility ([#3773](https://github.com/ng-bootstrap/ng-bootstrap/issues/3773)) ([6830d55](https://github.com/ng-bootstrap/ng-bootstrap/commit/6830d555243ba7814dcacda266c3ebb044f82d37))
+* **carousel:** add animations ([#3804](https://github.com/ng-bootstrap/ng-bootstrap/issues/3804)) ([61691d0](https://github.com/ng-bootstrap/ng-bootstrap/commit/61691d00bae0eae8c804daadeb26408a700c475f))
+* **collapse:** add 'NgbCollapseConfig' ([#3736](https://github.com/ng-bootstrap/ng-bootstrap/issues/3736)) ([8d5417a](https://github.com/ng-bootstrap/ng-bootstrap/commit/8d5417a65bfbe8e451e559e33978f06ab5e1c242))
+* **collapse:** add animations ([9bffcab](https://github.com/ng-bootstrap/ng-bootstrap/commit/9bffcab9bd1fc83933f4f7b776c3ebef3f16ca12))
+* **modal:** add animations ([86cbf06](https://github.com/ng-bootstrap/ng-bootstrap/commit/86cbf0695738ed55b6ce2771cf6943f1592eaf58))
+* **modal:** add scale animation when static backdrop is clicked ([#3771](https://github.com/ng-bootstrap/ng-bootstrap/issues/3771)) ([2b1cc56](https://github.com/ng-bootstrap/ng-bootstrap/commit/2b1cc565dcfae0bfdc1a37e31423f207b6f602bf))
+* **nav:** add animations ([d82a302](https://github.com/ng-bootstrap/ng-bootstrap/commit/d82a302da2912ca5739137728d292362491e65f5))
+* **nav:** nav config animations ([262ac7d](https://github.com/ng-bootstrap/ng-bootstrap/commit/262ac7d2401b09b68e93067d6c0127f61b0ce101))
+* **popover:** add animations ([b7f12e6](https://github.com/ng-bootstrap/ng-bootstrap/commit/b7f12e6479c6f7ae6d6d5f0289b4be3a59955ed9))
+* **toast:** add animations ([f8df46c](https://github.com/ng-bootstrap/ng-bootstrap/commit/f8df46cf8de4ee6d5ccf188aaedab70a11a98ab7))
+* **tooltip:** add animations ([cc55e6b](https://github.com/ng-bootstrap/ng-bootstrap/commit/cc55e6b2340033bb1ea43daa34140049dec2a046))
+* add global 'NgbConfig' ([#3715](https://github.com/ng-bootstrap/ng-bootstrap/issues/3715)) ([bf9b98d](https://github.com/ng-bootstrap/ng-bootstrap/commit/bf9b98d228fe10ed424a5d75b36c6043f4095143))
+
+
+### BREAKING CHANGES
+* animations are active by default on standard Bootstrap components, to opt-out, please check the [documentation](https://ng-bootstrap.github.io/#/animations)
+
+* **toast:** Toast events API has changed to stick with specs provided by Bootstrap
+
+Before:
+
+```
+<ngb-toast (hide)="..."></ngb-toast>
+```
+
+After:
+
+```
+// template
+ngb-toast (hidden)="..."></ngb-toast>
+```
+
+The `hidden` event is emitted after the 'fade out' animation is finished.
+
+* **alert:** Alert closing API has changed due to the introduction of the imperative `.close()` method to trigger the 'fade out' animation
+
+Before:
+
+```
+<ngb-alert (close)="..."></ngb-alert>
+```
+
+After:
+
+```
+// template
+<ngb-alert (closed)="..."></ngb-alert>
+
+// component
+alert.close();
+```
+
+The `closed` event is emitted after the 'fade out' animation is finished.
+The 'fade out' animation can be triggered either by clicking on the alert's 'cross button' or calling `.close()` method.
+
+
+
+# [7.0.0](https://github.com/ng-bootstrap/ng-bootstrap/compare/6.2.0...7.0.0) (2020-07-09)
+
+This major release officially adds Angular 10 support.
+
+### Bug Fixes
+* **schematics:** update schematics to use new workspace API ([#3802](https://github.com/ng-bootstrap/ng-bootstrap/pull/3802)) ([7c81d8d](https://github.com/ng-bootstrap/ng-bootstrap/commit/7c81d8d5aadbccc6878fc6055f632fcf9723e668)), closes [#3714](https://github.com/ng-bootstrap/ng-bootstrap/issues/3714)
+* **dropdown:** remove aria-haspopup for accessibility ([#3339](https://github.com/ng-bootstrap/ng-bootstrap/issues/3339)) ([0c92e39](https://github.com/ng-bootstrap/ng-bootstrap/commit/0c92e3922019c9b278ac1ea411ed15129ce399e1)), closes [#3331](https://github.com/ng-bootstrap/ng-bootstrap/issues/3331)
+
+### BREAKING CHANGES
+
+* for ng-bootstrap `7.0.0` minimal required version
+of Angular is `10.0.0`, and minimal required version of Bootstrap is `4.5.0`.
+
+
+# [6.2.0](https://github.com/ng-bootstrap/ng-bootstrap/compare/6.1.0...6.2.0) (2020-07-08)
+
+
+### Bug Fixes
+
+* **dropdown:** close dropdown when focus leaves menu ([#3625](https://github.com/ng-bootstrap/ng-bootstrap/issues/3625)) ([dc7990f](https://github.com/ng-bootstrap/ng-bootstrap/commit/dc7990f3087d59272289f5673592af2d902b198e)), closes [#3140](https://github.com/ng-bootstrap/ng-bootstrap/issues/3140)
+* **dropdown:** container body keyboard navigation ([#3791](https://github.com/ng-bootstrap/ng-bootstrap/issues/3791)) ([6e1610d](https://github.com/ng-bootstrap/ng-bootstrap/commit/6e1610d627fb1312e631d26145789632d345779f))
+* **dropdown:** support closest for HTMLDocument in EdgeHTML ([#3786](https://github.com/ng-bootstrap/ng-bootstrap/issues/3786)) ([d11530a](https://github.com/ng-bootstrap/ng-bootstrap/commit/d11530a822590153a698d932a337519bd1f3b264)), closes [#3783](https://github.com/ng-bootstrap/ng-bootstrap/issues/3783)
+* **progressbar:** use PercentPipe by default ([#3777](https://github.com/ng-bootstrap/ng-bootstrap/issues/3777)) ([ceb1985](https://github.com/ng-bootstrap/ng-bootstrap/commit/ceb1985fa13e4a3a3854d572c7910eb7cf325f5d)), closes [#3700](https://github.com/ng-bootstrap/ng-bootstrap/issues/3700)
+
+
+### Features
+
+* **modal:** get all the open modal instances using the NgbModal service ([#3650](https://github.com/ng-bootstrap/ng-bootstrap/issues/3650)) ([b45b39a](https://github.com/ng-bootstrap/ng-bootstrap/commit/b45b39a0b859652d399fdd1c650410b404108d77)), closes [#3627](https://github.com/ng-bootstrap/ng-bootstrap/issues/3627)
+
+
+
+# [6.1.0](https://github.com/ng-bootstrap/ng-bootstrap/compare/6.0.3...6.1.0) (2020-04-22)
+
+This release brings schematics to the `@ng-bootstrap/ng-bootstrap` package, so the library can be installed now with `ng add @ng-bootstrap/ng-bootstrap`. See [installation docs for more details](https://ng-bootstrap.github.io/#/getting-started#installation). 
+
+### Features
+
+* **modal:** add 'aria-describedby' for modal window ([#3695](https://github.com/ng-bootstrap/ng-bootstrap/issues/3695)) ([9a8e70d](https://github.com/ng-bootstrap/ng-bootstrap/commit/9a8e70de6ea2eab953d9a9f7012ff6a9815fd795)), closes [#3678](https://github.com/ng-bootstrap/ng-bootstrap/issues/3678)
+* **nav:** keyboard support for switching between navs ([#3612](https://github.com/ng-bootstrap/ng-bootstrap/issues/3612)) ([8c91ba5](https://github.com/ng-bootstrap/ng-bootstrap/commit/8c91ba5a634dd1356b7126888de0acf2d5589483))
+* **schematics:** add schematics to `@ng-bootstrap/ng-bootstrap` ([#3669](https://github.com/ng-bootstrap/ng-bootstrap/issues/3669)) ([464080b](https://github.com/ng-bootstrap/ng-bootstrap/commit/464080b3d48c2aad4c3f4a59ffd632cf3d6e731c))
+
+
+
+## [6.0.3](https://github.com/ng-bootstrap/ng-bootstrap/compare/6.0.2...6.0.3) (2020-04-17)
+
+
+### Bug Fixes
+
+* **datepicker:** set min/max dates correctly with custom adapters ([#3686](https://github.com/ng-bootstrap/ng-bootstrap/issues/3686)) ([644f71f](https://github.com/ng-bootstrap/ng-bootstrap/commit/644f71f)), closes [#3598](https://github.com/ng-bootstrap/ng-bootstrap/issues/3598)
+
+
+
+## [5.3.1](https://github.com/ng-bootstrap/ng-bootstrap/compare/5.3.0...5.3.1) (2020-04-17)
+
+
+### Bug Fixes
+
+* **datepicker:** set min/max dates correctly with custom adapters ([586672b](https://github.com/ng-bootstrap/ng-bootstrap/commit/586672b)), closes [#3598](https://github.com/ng-bootstrap/ng-bootstrap/issues/3598)
+
+
+
+## [6.0.2](https://github.com/ng-bootstrap/ng-bootstrap/compare/6.0.1...6.0.2) (2020-03-23)
+
+
+### Reverts
+
+* **dropdown:** avoid adding vertical scrollbars ([#3644](https://github.com/ng-bootstrap/ng-bootstrap/issues/3644), [#3655](https://github.com/ng-bootstrap/ng-bootstrap/issues/3655)) ([822a5c1](https://github.com/ng-bootstrap/ng-bootstrap/commit/822a5c1ab951f81104d87253c031b049588f880f)), closes [#3653](https://github.com/ng-bootstrap/ng-bootstrap/issues/3653)
+
+
+
+## [6.0.1](https://github.com/ng-bootstrap/ng-bootstrap/compare/6.0.0...6.0.1) (2020-03-20)
+
+Mostly technical release that improves compatibility with 'strictTemplates' and 'strictNullChecks'
+
+### Bug Fixes
+
+* support 'strictTemplates' flag for public API ([#3623](https://github.com/ng-bootstrap/ng-bootstrap/issues/3623)) ([eef5422](https://github.com/ng-bootstrap/ng-bootstrap/commit/eef5422b7c3e616233e68ee90bc60f73b72c2331)), closes [#3619](https://github.com/ng-bootstrap/ng-bootstrap/issues/3619)
+* improve compatibility with 'strictNullChecks' ([0b16754](https://github.com/ng-bootstrap/ng-bootstrap/commit/0b1675450b3b07b8f1eeb621872442743fdec5ba)), closes [#1544](https://github.com/ng-bootstrap/ng-bootstrap/issues/1544)
+* **datepicker:** disabled datepicker should not be clickable/focusable ([51c940b](https://github.com/ng-bootstrap/ng-bootstrap/commit/51c940b1cffc2af35b6ddb43152ee04cf019620a)), closes [#3648](https://github.com/ng-bootstrap/ng-bootstrap/issues/3648)
+* **dropdown:** avoid adding vertical scrollbars ([#3644](https://github.com/ng-bootstrap/ng-bootstrap/issues/3644)) ([05efeb7](https://github.com/ng-bootstrap/ng-bootstrap/commit/05efeb77077bb7faf6983fb03563272a5ce94b9d))
+
+
+
 # [6.0.0](https://github.com/ng-bootstrap/ng-bootstrap/compare/6.0.0-rc.0...6.0.0) (2020-02-21)
 
 This major release officially adds Angular 9 and ivy support. 

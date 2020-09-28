@@ -26,7 +26,8 @@ import { NgbdNavVerticalModule } from './demos/vertical/nav-vertical.module';
 const OVERVIEW = {
   'basic-usage': 'Basic Usage',
   customization: 'Customization',
-  routing: 'Router integration'
+  routing: 'Router integration',
+  'keyboard-shortcuts': 'Keyboard shortcuts'
 };
 
 const DEMOS = {
@@ -85,6 +86,9 @@ export const ROUTES = [
   {
     path: '',
     component: ComponentWrapper,
+    data: {
+      bootstrap: 'https://getbootstrap.com/docs/%version%/components/navs/'
+    },
     children: [
       { path: 'overview', component: NgbdNavOverviewComponent },
       { path: 'examples', component: NgbdExamplesPage },

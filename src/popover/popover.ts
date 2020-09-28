@@ -42,7 +42,7 @@ let nextId = 0;
     <div class="arrow"></div>
     <h3 class="popover-header" *ngIf="title != null">
       <ng-template #simpleTitle>{{title}}</ng-template>
-      <ng-template [ngTemplateOutlet]="isTitleTemplate() ? title : simpleTitle" [ngTemplateOutletContext]="context"></ng-template>
+      <ng-template [ngTemplateOutlet]="isTitleTemplate() ? $any(title) : simpleTitle" [ngTemplateOutletContext]="context"></ng-template>
     </h3>
     <div class="popover-body"><ng-content></ng-content></div>`,
   styleUrls: ['./popover.scss']
@@ -61,6 +61,8 @@ export class NgbPopoverWindow {
  */
 @Directive({selector: '[ngbPopover]', exportAs: 'ngbPopover'})
 export class NgbPopover implements OnInit, OnDestroy, OnChanges {
+  static ngAcceptInputType_autoClose: boolean | string;
+
   /**
    * Indicates whether the popover should be closed on `Escape` key and inside/outside clicks:
    *
@@ -158,7 +160,7 @@ export class NgbPopover implements OnInit, OnDestroy, OnChanges {
 
   private _ngbPopoverWindowId = `ngb-popover-${nextId++}`;
   private _popupService: PopupService<NgbPopoverWindow>;
-  private _windowRef: ComponentRef<NgbPopoverWindow>;
+  private _windowRef: ComponentRef<NgbPopoverWindow>| null = null;
   private _unregisterListenersFn;
   private _zoneSubscription: any;
   private _isDisabled(): boolean {
@@ -276,7 +278,7 @@ export class NgbPopover implements OnInit, OnDestroy, OnChanges {
 
   ngOnChanges({ngbPopover, popoverTitle, disablePopover, popoverClass}: SimpleChanges) {
     if (popoverClass && this.isOpen()) {
-      this._windowRef.instance.popoverClass = popoverClass.currentValue;
+      this._windowRef !.instance.popoverClass = popoverClass.currentValue;
     }
     // close popover if title and content become empty, or disablePopover set to true
     if ((ngbPopover || popoverTitle || disablePopover) && this._isDisabled()) {

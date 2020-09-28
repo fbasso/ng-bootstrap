@@ -80,7 +80,7 @@ const DEMOS = {
     code: require('!!raw-loader!./demos/range/datepicker-range').default,
     markup: require('!!raw-loader!./demos/range/datepicker-range.html').default
   },
-  rangePopup: {
+  'range-popup': {
     title: 'Range selection in a popup',
     type: NgbdDatepickerRangePopup,
     code: require('!!raw-loader!./demos/range-popup/datepicker-range-popup').default,
@@ -147,7 +147,6 @@ export const ROUTES = [
   {
     path: '',
     component: ComponentWrapper,
-    data: { OVERVIEW },
     children: [
       { path: 'overview', component: NgbdDatepickerOverviewComponent },
       { path: 'examples', component: NgbdExamplesPage },
