@@ -53,6 +53,7 @@
     "testcafe": "npx testcafe -L",
     "cypress": "npx cypress open",
     "playwright": "jest --colors --config e2e-app/jest.config.js",
+    "playwright:browser": "ts-node e2e-app/launchBrowser.ts",
     "schematics:lint": "tslint --project schematics/tsconfig.json",
     "schematics:build": "rimraf schematics/dist && tsc --project schematics/tsconfig.json",
     "schematics:tdd": "ts-node-dev --respawn --project misc/tsconfig.json node_modules/jasmine/bin/jasmine schematics/**/*.spec.ts",

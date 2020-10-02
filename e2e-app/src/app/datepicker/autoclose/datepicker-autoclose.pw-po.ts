@@ -16,10 +16,7 @@ export class DatepickerAutoClosePage extends DatepickerPage {
 
   async clickOutside() { await page.click('#outside-button'); }
 
-  async rightClickOutside() {
-    await page.click('#outside-button', {button: 'right'});
-    console.log('After rightClickOutside');
-  }
+  async rightClickOutside() { await page.click('#outside-button', {button: 'right'}); }
 
   async selectAutoClose(type: string) {
     await page.click('#autoclose-dropdown');

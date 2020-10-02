@@ -2,6 +2,11 @@ import {DatepickerAutoClosePage} from './datepicker-autoclose.pw-po';
 
 describe('Datepicker Autoclose', () => {
 
+  beforeAll(() => { console.time('test'); });
+
+  afterAll(() => { console.timeEnd('test'); });
+
+
   const po = new DatepickerAutoClosePage();
   const expectDatepickerToBeClosed = async(message: string) => {
     await page.waitForSelector(po.getDatepicker(), {state: 'detached'});
