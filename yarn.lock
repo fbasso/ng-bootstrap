@@ -1476,6 +1476,18 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
+"@floating-ui/core@^0.2.2":
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/@floating-ui/core/-/core-0.2.2.tgz#5d862f1bdd634ff48b6c05b3d08e76232dbe69e6"
+  integrity sha512-KxPG+g8f5cuFrljdjKnB0U/7PTtegWAEOuw2G8PKuveYAHxln8qpSCcv/AVpyqm6a55jXLSDrgHUJ7nbNp4zGA==
+
+"@floating-ui/dom@^0.1.8":
+  version "0.1.8"
+  resolved "https://registry.yarnpkg.com/@floating-ui/dom/-/dom-0.1.8.tgz#c96ad8b84be6eeb6d1754293ea5cfc9e30d3f0cd"
+  integrity sha512-Y2X4ukLxNcYPfdu94s03XYCIIUxBWJTA1M3NXu5akNrDGzD/61qKF56NhCZbzRMc+SSLX8Bga6cj7Sm8vPv79g==
+  dependencies:
+    "@floating-ui/core" "^0.2.2"
+
 "@gar/promisify@^1.0.1":
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/@gar/promisify/-/promisify-1.1.2.tgz#30aa825f11d438671d585bd44e7fd564535fc210"
@@ -1706,11 +1718,6 @@
     tmp "~0.2.1"
     tslib "^2.3.0"
     yargs-parser "20.0.0"
-
-"@popperjs/core@^2.10.2":
-  version "2.11.2"
-  resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.11.2.tgz#830beaec4b4091a9e9398ac50f865ddea52186b9"
-  integrity sha512-92FRmppjjqz29VMJ2dn+xdyXZBrMlE42AV6Kq6BwjWV7CNUW1hs2FtxSNLQE+gJhaZ6AAmYuO9y8dshhcBl7vA==
 
 "@rollup/plugin-json@^4.1.0":
   version "4.1.0"
@@ -10534,6 +10541,11 @@ typescript@~4.4.4:
   integrity sha512-DqGhF5IKoBl8WNf8C1gu8q0xZSInh9j1kJJMqT3a94w1JzVaBU4EXOSMrz9yDqMT0xt3selp83fuFMQ0uzv6qA==
 
 ua-parser-js@^0.7.21, ua-parser-js@^0.7.30:
+  version "0.7.31"
+  resolved "https://registry.yarnpkg.com/ua-parser-js/-/ua-parser-js-0.7.31.tgz#649a656b191dffab4f21d5e053e27ca17cbff5c6"
+  integrity sha512-qLK/Xe9E2uzmYI3qLeOmI0tEOt+TBBQyUIAh4aAgU05FVYzeZrKUdkAZfBNVGRaHVgV0TDkdEngJSw/SyQchkQ==
+
+ua-parser-js@^0.7.30:
   version "0.7.31"
   resolved "https://registry.yarnpkg.com/ua-parser-js/-/ua-parser-js-0.7.31.tgz#649a656b191dffab4f21d5e053e27ca17cbff5c6"
   integrity sha512-qLK/Xe9E2uzmYI3qLeOmI0tEOt+TBBQyUIAh4aAgU05FVYzeZrKUdkAZfBNVGRaHVgV0TDkdEngJSw/SyQchkQ==

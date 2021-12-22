@@ -43,7 +43,7 @@
     "@angular/core": "^13.0.0",
     "@angular/forms": "^13.0.0",
     "@angular/localize": "^13.0.0",
-    "@popperjs/core": "^2.10.2",
+    "@floating-ui/dom": "^0.1.8",
     "rxjs": "^6.5.3 || ^7.4.0"
   },
   "schematics": "./schematics/collection.json"

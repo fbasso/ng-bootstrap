@@ -1,13 +1,16 @@
-import {
-  arrow,
-  createPopperLite,
-  flip,
-  Instance,
-  Modifier,
-  Placement as PopperPlacement,
-  preventOverflow,
-  Options,
-} from '@popperjs/core';
+// import {
+//   arrow,
+//   createPopperLite,
+//   flip,
+//   Instance,
+//   Modifier,
+//   Placement as PopperPlacement,
+//   preventOverflow,
+//   Options,
+// } from '@popperjs/core';
+
+import {computePosition, arrow} from '@floating-ui/dom';
+import {Placement as FloatingUIPlacement, ComputePositionConfig} from '@floating-ui/core';
 
 const placementSeparator = /\s+/;
 const spacesRegExp = /  +/gi;
@@ -16,11 +19,11 @@ const startPrimaryPlacement = /^start/;
 const endPrimaryPlacement = /^end/;
 const startSecondaryPlacement = /-(top|left)$/;
 const endSecondaryPlacement = /-(bottom|right)$/;
-export function getPopperClassPlacement(placement: Placement): PopperPlacement {
+export function getPopperClassPlacement(placement: Placement): FloatingUIPlacement {
   const newPlacement = placement.replace(startPrimaryPlacement, 'left')
                            .replace(endPrimaryPlacement, 'right')
                            .replace(startSecondaryPlacement, '-start')
-                           .replace(endSecondaryPlacement, '-end') as PopperPlacement;
+                           .replace(endSecondaryPlacement, '-end') as FloatingUIPlacement;
   return newPlacement;
 }
 
@@ -28,7 +31,7 @@ const popperStartPrimaryPlacement = /^left/;
 const popperEndPrimaryPlacement = /^right/;
 const popperStartSecondaryPlacement = /^start/;
 const popperEndSecondaryPlacement = /^end/;
-export function getBootstrapBaseClassPlacement(baseClass: string, placement: PopperPlacement): string {
+export function getBootstrapBaseClassPlacement(baseClass: string, placement: FloatingUIPlacement): string {
   let [primary, secondary] = placement.split('-');
   const newPrimary = primary.replace(popperStartPrimaryPlacement, 'start').replace(popperEndPrimaryPlacement, 'end');
   let classnames = [newPrimary];
@@ -56,7 +59,7 @@ export function getBootstrapBaseClassPlacement(baseClass: string, placement: Pop
  *   'start-top', 'start-bottom',
  *   'end-top', 'end-bottom'.
  * */
-export function getPopperOptions({placement, baseClass}: PositioningOptions): Partial<Options> {
+export function getFloatingUIOptions({placement, baseClass}: PositioningOptions): Partial<ComputePositionConfig> {
   let placementVals: Array<Placement> =
       Array.isArray(placement) ? placement : placement.split(placementSeparator) as Array<Placement>;
 
@@ -80,54 +83,65 @@ export function getPopperOptions({placement, baseClass}: PositioningOptions): Pa
 
   let mainPlacement = popperPlacements.shift();
 
-  const bsModifier: Partial<Modifier<any, any>> = {
-    name: 'bootstrapClasses',
-    enabled: !!baseClass,
-    phase: 'write',
-    fn({state}) {
-      const bsClassRegExp = new RegExp(baseClass + '-[a-z]+', 'gi');
+  // const bsModifier: Partial<Modifier<any, any>> = {
+  //   name: 'bootstrapClasses',
+  //   enabled: !!baseClass,
+  //   phase: 'write',
+  //   fn({state}) {
+  //     const bsClassRegExp = new RegExp(baseClass + '-[a-z]+', 'gi');
 
-      const popperElement: HTMLElement = state.elements.popper as HTMLElement;
-      const popperPlacement = state.placement;
+  //     const popperElement: HTMLElement = state.elements.popper as HTMLElement;
+  //     const popperPlacement = state.placement;
 
-      let className = popperElement.className;
+  //     let className = popperElement.className;
 
-      // Remove old bootstrap classes
-      className = className.replace(bsClassRegExp, '');
+  //     // Remove old bootstrap classes
+  //     className = className.replace(bsClassRegExp, '');
 
-      // Add current placements
-      className += ` ${getBootstrapBaseClassPlacement(baseClass !, popperPlacement)}`;
+  //     // Add current placements
+  //     className += ` ${getBootstrapBaseClassPlacement(baseClass !, popperPlacement)}`;
 
-      // Remove multiple spaces
-      className = className.trim().replace(spacesRegExp, ' ');
+  //     // Remove multiple spaces
+  //     className = className.trim().replace(spacesRegExp, ' ');
 
-      // Reassign
-      popperElement.className = className;
-    },
-  };
+  //     // Reassign
+  //     popperElement.className = className;
+  //   },
+  // };
+
+  const middleware = [];
+
+  const arrowEl = document.querySelector('[data-popper-arrow]');
+  if (arrowEl) {
+  }
+
 
   return {
     placement: mainPlacement,
-    modifiers: [
-      bsModifier,
-      flip,
-      preventOverflow,
-      arrow,
-      {
-        enabled: true,
-        name: 'flip',
-        options: {
-          fallbackPlacements: popperPlacements,
-        },
-      },
-      {
-        enabled: true,
-        name: 'preventOverflow',
-        phase: 'main',
-        fn: function() {},
-      },
-    ]
   };
+
+  // return {
+  //   placement: mainPlacement,
+  //   modifiers: [
+  //     bsModifier,
+  //     flip,
+  //     preventOverflow,
+  //     arrow,
+  //     {
+  //       enabled: true,
+  //       name: 'flip',
+  //       options: {
+  //         fallbackPlacements: popperPlacements,
+  //       },
+  //     },
+  //     {
+  //       enabled: true,
+  //       name: 'preventOverflow',
+  //       phase: 'main',
+  //       fn: function() {},
+  //     },
+  //   ]
+  // };
 }
 
 export type Placement = 'auto' | 'top' | 'bottom' | 'start' | 'left' | 'end' | 'right' | 'top-start' | 'top-left' |
@@ -142,41 +156,44 @@ interface PositioningOptions {
   placement: string | Placement | PlacementArray;
   appendToBody?: boolean;
   baseClass?: string;
-  updatePopperOptions?: (options: Partial<Options>) => Partial<Options>;
+  updatePopperOptions?: (options: Partial<ComputePositionConfig>) => Partial<ComputePositionConfig>;
 }
 
 function noop(arg) {
   return arg;
 }
 export function ngbPositioning() {
-  let popperInstance: Instance | null = null;
+  let floatingUIOptions;
+  let hostElement;
+  let floatingEl;
+
+
+  function update() {
+    computePosition(hostElement, floatingEl, floatingUIOptions).then(({x, y, middlewareData}) => {
+      Object.assign(floatingEl.style, {
+        left: `${x}px`,
+        top: `${y}px`,
+      });
+    });
+    ;
+  }
 
   return {
     createPopper(positioningOption: PositioningOptions) {
-      if (!popperInstance) {
-        const updatePopperOptions = positioningOption.updatePopperOptions || noop;
-        let popperOptions = updatePopperOptions(getPopperOptions(positioningOption));
-        popperInstance =
-            createPopperLite(positioningOption.hostElement, positioningOption.targetElement, popperOptions);
-      }
+      const updatePopperOptions = positioningOption.updatePopperOptions || noop;
+      hostElement = positioningOption.hostElement;
+      floatingEl = positioningOption.targetElement;
+      floatingUIOptions = updatePopperOptions(getFloatingUIOptions(positioningOption));
+      update();
+
     },
-    update() {
-      if (popperInstance) {
-        popperInstance.update();
-      }
-    },
+    update,
     setOptions(positioningOption: PositioningOptions) {
-      if (popperInstance) {
-        const updatePopperOptions = positioningOption.updatePopperOptions || noop;
-        let popperOptions = updatePopperOptions(getPopperOptions(positioningOption));
-        popperInstance.setOptions(popperOptions);
-      }
+      const updatePopperOptions = positioningOption.updatePopperOptions || noop;
+      hostElement = positioningOption.hostElement;
+      floatingEl = positioningOption.targetElement;
+      floatingUIOptions = updatePopperOptions(getFloatingUIOptions(positioningOption));
     },
-    destroy() {
-      if (popperInstance) {
-        popperInstance.destroy();
-        popperInstance = null;
-      }
-    }
+    destroy() {}
   };
 }

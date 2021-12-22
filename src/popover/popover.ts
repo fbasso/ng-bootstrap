@@ -30,21 +30,22 @@ import {PopupService} from '../util/popup';
 
 import {NgbPopoverConfig} from './popover-config';
 
-import {Options, offset} from '@popperjs/core';
+// import {Options, offset} from '@popperjs/core';
 import {Subscription} from 'rxjs';
 import {take} from 'rxjs/operators';
+import {ComputePositionConfig} from '@floating-ui/core';
 
 let nextId = 0;
 
-function updatePopperOptions(options: Options) {
-  options.modifiers !.push(offset, {
-    name: 'offset',
-    options: {
-      offset: () => {
-        return [0, 12];
-      },
-    },
-  });
+function updatePopperOptions(options: ComputePositionConfig) {
+  // options.modifiers !.push(offset, {
+  //   name: 'offset',
+  //   options: {
+  //     offset: () => {
+  //       return [0, 12];
+  //     },
+  //   },
+  // });
 
   return options;
 }
